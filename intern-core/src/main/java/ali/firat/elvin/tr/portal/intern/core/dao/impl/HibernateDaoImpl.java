@@ -2,6 +2,7 @@ package ali.firat.elvin.tr.portal.intern.core.dao.impl;
 
 import ali.firat.elvin.tr.portal.intern.core.dao.HibernateDao;
 import ali.firat.elvin.tr.portal.intern.core.exception.DaoException;
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -43,6 +44,7 @@ public class HibernateDaoImpl <T, Id extends Serializable> implements HibernateD
     }
 
     protected final Session getCurrentSession(){
+        sessionFactory.openSession();
         return sessionFactory.getCurrentSession();
     }
 
@@ -112,7 +114,12 @@ public class HibernateDaoImpl <T, Id extends Serializable> implements HibernateD
     @Override
     public <M>List<M> findAll(Class<? extends M> persistentClass) throws DaoException {
         String query = "from " + persistentClass.getName() + " o";
-        return getCurrentSession().createQuery(query).list();
+        try {
+            return getCurrentSession().createQuery(query).list();
+        }catch (HibernateException e){
+            sessionFactory.openSession();
+            return getCurrentSession().createQuery(query).list();
+        }
     }
 
     @SuppressWarnings("unchecked")

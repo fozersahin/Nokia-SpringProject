@@ -42,22 +42,21 @@
                             <!--====================================================================-->
                             <p:dialog id="dialog3" draggable="false" header="New Author"
                                       hideEffect="fade"
-                                      showEffect="fade" widgetVar="dlg3" modal="false" width="450"
-                                      height="303" resizable="false">
+                                      showEffect="fade" widgetVar="dlg3" modal="true" width="450"
+                                      height="200" resizable="false">
                                 <!--<h:form styleClass="form-horizontal" id="editForm">-->
                                 <div class="form-group">
-                                    <h:outputText value="Author Name"/>
-                                    <p:inputText id="aName1" styleClass="form-control"
+                                    <p:inputText id="aName1" styleClass="form-control" placeholder="Author Name"
                                                  value="#{authorBean.authors.name}"/><br/>
                                 </div>
                                 <div class="form-group">
-                                    <h:outputText value="Author Surname"/>
-                                    <p:inputText id="aSurname1" styleClass="form-control"
+                                    <p:inputText id="aSurname1" styleClass="form-control" placeholder="Author Surname"
                                                  value="#{authorBean.authors.surname}"/><br/>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-md-4">
                                     <h:commandButton
-                                            styleClass="btn btn-success" type="submit"
+                                            styleClass="btn btn-success btn-block"
+                                            style="background-color: transparent; color: green;" type="submit"
                                             action="#{authorBean.createAuthor(authorBean.authors)}"
                                             value="Add">
                                     </h:commandButton>
@@ -66,14 +65,16 @@
 
                         </h:form>
                     </div>
-                    <div style="margin-top: 220px; margin-bottom: 278px;">
+                    <div>
                         <h:form id="form">
                             <p:growl id="msgs" showDetail="true"/>
-                            <p:panel id="basic" header="All Authors" style="margin-bottom:20px; opacity: 0.9;">
+                            <p:panel id="basic" header="All Authors" style="margin-top:150px;margin-bottom:150px; opacity: 0.9;">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <p:dataTable id="dtb1" value="#{authorBean.findAllAuthors()}" var="au"
-                                                 disabledSelection="true">
-                                        <p:column headerText="Author Name">
+                                                 disabledSelection="true" paginator="true" rows="5"
+                                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                                 rowsPerPageTemplate="5,10,15">
+                                        <p:column id="col1" headerText="Author Name" filterBy="#{au.name}">
                                             #{au.name} #{au.surname}
                                         </p:column>
                                         <p:column style="text-align: center;" headerText="Functions">
@@ -81,10 +82,10 @@
                                                 <p:commandLink
                                                         style="margin-right: 4px; color: white; text-align:center;"
                                                         styleClass="btn btn-danger btn-circle btn-xl "
-                                                        action="#{authorService.delete(au.id)}">
+                                                        action="#{authorBean.deleteAuthor(au.id)}">
                                                     <i style="vertical-align: middle;"
                                                        class="glyphicon glyphicon-remove"><f:ajax
-                                                            render="dtb1"></f:ajax></i>
+                                                            render="dtb1"/></i>
 
                                                 </p:commandLink>
                                                 <p:commandLink update="dialog2"
@@ -105,7 +106,7 @@
                                                 <!--=======================AUTHOR INFO DIALOG===========================-->
                                                 <!--====================================================================-->
                                                 <p:dialog id="dialog" header="Author Info" hideEffect="fade"
-                                                          showEffect="fade" widgetVar="dlg" modal="true" width="450"
+                                                          showEffect="fade" widgetVar="dlg" modal="false" width="450"
                                                           height="225" resizable="false">
                                                     <!--<h:form styleClass="form-group" id="infoForm">-->
                                                     <div>

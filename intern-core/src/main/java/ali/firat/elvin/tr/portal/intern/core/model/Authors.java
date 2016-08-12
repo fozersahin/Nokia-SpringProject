@@ -4,18 +4,21 @@ import net.sf.ehcache.config.PersistenceConfiguration;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by yektan on 26.07.2016.
  */
 @Entity
-@ManagedBean(name="author")
-public class Authors {
+@Table(name = "Authors",catalog = "intern")
+public class Authors implements Serializable {
     private int id;
     private String name;
     private String surname;
-    private Collection<BookAuthor> bookAuthorsById;
+    private Set<Books> books = new HashSet<Books>();
 
     @Id
     @Column(name = "ID", nullable = false)
@@ -70,12 +73,15 @@ public class Authors {
         return result;
     }
 
-    @OneToMany(mappedBy = "authorsByAuthorid")
-    public Collection<BookAuthor> getBookAuthorsById() {
-        return bookAuthorsById;
+
+
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "authors")
+    public Set<Books> getBooks() {
+        return this.books;
+    }
+    public void setBooks(Set<Books> books) {
+        this.books = books;
     }
 
-    public void setBookAuthorsById(Collection<BookAuthor> bookAuthorsById) {
-        this.bookAuthorsById = bookAuthorsById;
-    }
+
 }

@@ -22,7 +22,6 @@
     </bean>
 
     <context:component-scan base-package="ali.firat.elvin.tr"/>
-
     <!-- Hibernate SessionFactory Definition -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <!--<property name="dataSource" ref="dataSource"/> -->
@@ -30,8 +29,8 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>
-                <prop key="hibernate.show_sql">true</prop>-->
+                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>-->
+                <prop key="hibernate.show_sql">true</prop>
                 <prop key="format_sql">${hibernate.format_sql}</prop>
                 <prop key="use_sql_comments">${hibernate.use_sql_comments}</prop>
                 <prop key="hibernate.cglib.use_reflection_optimizer">${hibernate.cglib.use_reflection_optimizer}</prop>

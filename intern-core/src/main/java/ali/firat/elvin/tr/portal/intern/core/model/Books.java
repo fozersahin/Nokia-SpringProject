@@ -3,24 +3,32 @@ package ali.firat.elvin.tr.portal.intern.core.model;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by yektan on 26.07.2016.
  */
 @Entity
+@Table(name = "Books", catalog = "intern")
 @ManagedBean(name = "book")
-public class Books {
+public class Books implements Serializable {
 
-    @ManagedProperty(value = "#{param.bookID}")
     private int id;
     private String name;
     private Integer year;
     private int publisherid;
     private Publishers publishersByPublisherid;
-    private List<BookAuthor> bookAuthorsById;
-    private List<BookGenre> bookGenresById;
+    private Set<Authors> authors = new HashSet<Authors>(0);
+    private Set<Genre> genres = new HashSet<Genre>(0);
+//    private List<BookAuthor> bookAuthorsById;
+//    private List<BookGenre> bookGenresById;
+
+
+
 
     @Id
     @Column(name = "ID", nullable = false)
@@ -97,6 +105,7 @@ public class Books {
         this.publishersByPublisherid = publishersByPublisherid;
     }
 
+<<<<<<< refs/remotes/origin/master
     @OneToMany(mappedBy = "booksByBookid")
     public List<BookAuthor> getBookAuthorsById() {
         return bookAuthorsById;
@@ -119,4 +128,45 @@ public class Books {
     public String toString() {
         return "Book id =" + getId() + "Book Name = " + getName() + "Book Publish Year" + getYear();
     }
+=======
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "book_author", joinColumns =
+    @JoinColumn(name = "BOOKID",nullable = false,updatable = false),
+            inverseJoinColumns = { @JoinColumn(name = "AUTHORID",nullable = false,updatable = false)})
+    public Set<Authors> getAuthors() {
+        return this.authors;
+    }
+    public void setAuthors(Set<Authors> authors) {
+        this.authors = authors;
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "book_genre", joinColumns =
+    @JoinColumn(name = "BOOKID",nullable = false,updatable = false),
+            inverseJoinColumns = { @JoinColumn(name = "GENREID",nullable = false,updatable = false)})
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
+    }
+//
+//    @OneToMany(mappedBy = "booksByBookid")
+//    public List<BookAuthor> getBookAuthorsById() {
+//        return bookAuthorsById;
+//    }
+//
+//    public void setBookAuthorsById(List<BookAuthor> bookAuthorsById) {
+//        this.bookAuthorsById = bookAuthorsById;
+//    }
+//
+//    @OneToMany(mappedBy = "booksByBookid")
+//    public List<BookGenre> getBookGenresById() {
+//        return bookGenresById;
+//    }
+//
+//    public void setBookGenresById(List<BookGenre> bookGenresById) {
+//        this.bookGenresById = bookGenresById;
+//    }
+>>>>>>> Update 1.3
 }
