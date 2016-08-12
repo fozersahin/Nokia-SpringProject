@@ -29,46 +29,132 @@
                     </div>
                 </div>
             </div>
-            <div class="container" style="margin-top: 110px; margin-bottom: 110px;">
-                <div class="col-md-4">
+            <div style="background: url(#{resource['alu:img/library.jpg']}) center center fixed; margin: 0;">
+                <div class="container">
+                    <div class="col-md-4">
+                        <h:form id="form2">
+                            <p:commandLink update="dialog3" icon="ui-icon-plus" styleClass="btn btn-block btn-success"
+                                           style="border-radius: 25px; z-index: 999; margin-top: 110px;"
+                                           value="Add Author"
+                                           oncomplete="PF('dlg3').show();"></p:commandLink>
+                            <!--====================================================================-->
+                            <!--=======================ADD GENRE DIALOG============================-->
+                            <!--====================================================================-->
+                            <p:dialog id="dialog3" draggable="false" header="New Genre"
+                                      hideEffect="fade"
+                                      showEffect="fade" widgetVar="dlg3" modal="true" width="450"
+                                      height="200" resizable="false">
+                                <!--<h:form styleClass="form-horizontal" id="editForm">-->
+                                <div class="form-group">
+                                    <p:inputText id="aName1" styleClass="form-control" placeholder="Genre Name"
+                                                 value="#{genreBean.genre.name}"/><br/>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <h:commandButton
+                                            styleClass="btn btn-success btn-block"
+                                            style="background-color: transparent; color: green;" type="submit"
+                                            action="#{genreBean.createGenre(genreBean.genre)}"
+                                            value="Add">
+                                    </h:commandButton>
+                                </div>
+                            </p:dialog>
 
-                    <p:commandButton icon="ui-icon-plus" styleClass="btn btn-block btn-success" style="border-radius: 25px;"
-                                     value="Add Genre"
-                                     action="#{navigatorBean.forwardToPage('/public/auth/addgenre.jsf',false,true)}"/>
-                </div>
-                <br/><br/><br/>
-                <div>
-                    <h:form>
-                        <p:growl id="msgs" showDetail="true"/>
-                        <p:panel id="basic" header="All Genres" style="margin-bottom:20px">
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <p:dataTable id="dtb" value="#{genreService.findAll()}" var="o">
-                                    <p:column headerText="Genre Name">
-                                        #{o.name}
-                                    </p:column>
+                        </h:form>
+                    </div>
+                    <div>
+                        <h:form id="form">
+                            <p:growl id="msgs" showDetail="true"/>
+                            <p:panel id="basic" header="All Authors"
+                                     style="margin-top:150px;margin-bottom:150px; opacity: 0.9;">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <p:dataTable id="dtb2" value="#{genreBean.findAllGenres()}" var="gen"
+                                                 disabledSelection="true" paginator="true" rows="5"
+                                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                                 rowsPerPageTemplate="5,10,15">
+                                        <p:column id="col1" headerText="Author Name">
+                                            #{gen.name}
+                                        </p:column>
+                                        <p:column style="text-align: center;" headerText="Functions">
+                                            <div>
+                                                <p:commandLink
+                                                        style="margin-right: 4px; color: white; text-align:center;"
+                                                        styleClass="btn btn-danger btn-circle btn-xl "
+                                                        action="#{genreBean.deleteGenre(gen.id)}">
+                                                    <i style="vertical-align: middle;"
+                                                       class="glyphicon glyphicon-remove"><f:ajax
+                                                            render="dtb2"/></i>
 
-                                    <p:column headerText="Functions">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <p:commandButton styleClass="btn-block" value="Delete"
-                                                                 action="#{genreService.delete(o.id)}">
-                                                    <f:ajax render="dtb"/>
-                                                </p:commandButton>
+                                                </p:commandLink>
+                                                <p:commandLink update="dialogEditGenre"
+                                                               style="margin-right: 4px;color: white; border-radius: 40px;"
+                                                               styleClass="btn btn-primary btn-circle btn-xl "
+                                                               type="button" oncomplete="PF('dlg2').show();">
+                                                    <i style="vertical-align: middle;"
+                                                       class="glyphicon glyphicon-pencil"></i>
+                                                </p:commandLink>
+                                                <p:commandLink update="dialogDetailGenre"
+                                                               style="margin-right: 4px;color: white; border-radius: 40px;"
+                                                               styleClass="btn btn-circle btn-xl btn-warning"
+                                                               type="button" oncomplete="PF('dlg').show();">
+                                                    <i style="vertical-align: middle;"
+                                                       class="glyphicon glyphicon-info-sign"></i>
+                                                </p:commandLink>
+                                                <!--====================================================================-->
+                                                <!--=======================AUTHOR INFO DIALOG===========================-->
+                                                <!--====================================================================-->
+                                                <p:dialog id="dialogDetailGenre" header="Genre Info" hideEffect="fade"
+                                                          showEffect="fade" widgetVar="dlg" modal="false" width="450"
+                                                          height="225" resizable="false">
+                                                    <!--<h:form styleClass="form-group" id="infoForm">-->
+                                                    <div>
+                                                        <h:outputText value="Genre ID"/>
+                                                        <h:inputText styleClass="form-control" value="#{gen.id}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <div>
+                                                        <h:outputText value="Genre Name"/>
+                                                        <h:inputText styleClass="form-control" value="#{gen.name}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <!--</h:form>-->
+                                                </p:dialog>
+                                                <!--====================================================================-->
+                                                <!--======================AUTHOR EDIT DIALOG============================-->
+                                                <!--====================================================================-->
+                                                <p:dialog id="dialogEditGenre" draggable="false" header="Genre Edit"
+                                                          hideEffect="fade"
+                                                          showEffect="fade" widgetVar="dlg2" modal="false" width="450"
+                                                          height="303" resizable="false">
+                                                    <!--<h:form styleClass="form-horizontal" id="editForm">-->
+                                                    <h:outputText value="#{genreBean.findGenre(gen.id)}"/>
+                                                    <div class="form-group">
+                                                        <h:outputText value="Author ID"/>
+                                                        <p:inputText styleClass="form-control"
+                                                                     id="aId" value="#{genreBean.genre.id}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:outputText value="Author Name"/>
+                                                        <p:inputText id="aName" styleClass="form-control"
+                                                                     value="#{genreBean.genre.name}"/><br/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:commandButton
+                                                                styleClass="btn btn-success" type="submit"
+                                                                action="#{genreBean.updateGenre(genreBean.genre)}"
+                                                                value="Save">
+                                                        </h:commandButton>
+                                                    </div>
+                                                    <!--</h:form>-->
+                                                </p:dialog>
+
                                             </div>
-                                            <div class="col-md-4">
-                                                <p:commandButton styleClass="btn-block" value="Edit"
-                                                                 action="#{genreBean.getGenreWithURL(o.id,'editgenre')}"/>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p:commandButton styleClass="btn-block" value="Details"
-                                                                 action="#{genreBean.getGenreWithURL(o.id,'genredetail')}"/>
-                                            </div>
-                                        </div>
-                                    </p:column>
-                                </p:dataTable>
-                            </h:panelGrid>
-                        </p:panel>
-                    </h:form>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:panel><!--action="#{authorBean.getAuthorWithURL(o.id,'authordetail')}" -->
+                        </h:form>
+                    </div>
                 </div>
             </div>
         </ui:define>

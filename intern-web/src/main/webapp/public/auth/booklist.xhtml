@@ -29,30 +29,229 @@
                     </div>
                 </div>
             </div>
-            <div class="container" style="margin-top: 110px; margin-bottom: 110px;">
-                <h:form>
-                    <p:growl id="msgs" showDetail="true"/>
-                    <p:panel id="basic" header="All Books" style="margin-bottom:20px">
-                        <h:panelGrid columns="2" cellpadding="10">
-                            <p:dataTable value="#{bookService.findAll()}" var="o">
-                                <p:column headerText="Book Name">
-                                    #{o.name}
-                                </p:column>
-                                <p:column headerText="Publish Year">
-                                    #{o.year}
-                                </p:column>
-                                <p:column headerText="Publisher">
-                                    #{publisherService.get(o.publisherid).name}
-                                </p:column>
-                                <p:column headerText="Functions">
-                                    <p:commandButton value="Delete" action="#{bookService.delete(o.id)}"/>
-                                    <p:commandButton value="Edit"/>
-                                    <p:commandButton value="Details"/>
-                                </p:column>
-                            </p:dataTable>
-                        </h:panelGrid>
-                    </p:panel>
-                </h:form>
+            <div style="background: url(#{resource['alu:img/library.jpg']}) center center fixed; margin: 0;">
+                <div class="container">
+                    <div class="col-md-4">
+                        <h:form id="form2">
+                            <p:commandLink icon="ui-icon-plus" styleClass="btn btn-block btn-success"
+                                           style="border-radius: 25px;margin-bottom: 30px; z-index: 999; margin-top: 110px;"
+                                           value="Add Book"
+                                           oncomplete="PF('dlg3').show();"></p:commandLink>
+                            <!--====================================================================-->
+                            <!--========================ADD BOOK DIALOG=============================-->
+                            <!--====================================================================-->
+                            <p:dialog id="dialog3" draggable="false" header="New Book"
+                                      hideEffect="fade"
+                                      showEffect="fade" widgetVar="dlg3" modal="true" width="450"
+                                      height="300" resizable="false">
+                                <!--<h:form styleClass="form-horizontal" id="editForm">-->
+                                <div class="form-group">
+                                    <p:inputText id="bName" styleClass="form-control" placeholder="Book Name"
+                                                 value="#{bookBean.books.name}"/><br/>
+                                </div>
+                                <div class="form-group">
+                                    <p:inputText id="bYear" styleClass="form-control" placeholder="Publish Year"
+                                                 value="#{bookBean.books.year}"/><br/>
+                                </div>
+                                <div class="form-group">
+                                    <h:selectOneMenu styleClass="form-control"
+                                                     value="#{bookBean.books.publisherid}">
+                                        <f:selectItem itemValue="" itemLabel="Select Publisher"
+                                                      noSelectionOption="true">
+                                        </f:selectItem>
+                                        <f:selectItems value="#{publisherService.findAll()}" var="pub"
+                                                       itemLabel="#{pub.name}" itemValue="#{pub.id}"/>
+
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <h:selectOneMenu styleClass="form-control"
+                                                     value="#{bookBean.author.id}">
+                                        <f:selectItem itemValue="" itemLabel="Select Author" noSelectionOption="true">
+                                        </f:selectItem>
+                                        <f:selectItems value="#{authorBean.findAllAuthors()}" var="auth"
+                                                       itemLabel="#{auth.name}" itemValue="#{auth.id}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <h:selectOneMenu styleClass="form-control"
+                                                     value="#{bookBean.genre.id}">
+                                        <f:selectItem itemValue="" itemLabel="Select Genre" noSelectionOption="true">
+                                        </f:selectItem>
+                                        <f:selectItems value="#{genreBean.findAllGenres()}" var="genre"
+                                                       itemLabel="#{genre.name}" itemValue="#{genre.id}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <h:commandButton
+                                            styleClass="btn btn-success btn-block"
+                                            style="background-color: transparent; color: green;" type="submit"
+                                            action="#{bookBean.createEverything(bookBean.books,bookBean.author.id,bookBean.genre.id)}"
+                                            value="Add Book">
+                                    </h:commandButton>
+                                </div>
+                            </p:dialog>
+                        </h:form>
+                    </div>
+                    <div>
+                        <h:form>
+                            <p:panel id="basic1" header="All Books"
+                                     style="margin-top:150px; margin-bottom:150px; opacity: 0.94;">
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    <p:dataTable id="dtb3" value="#{bookBean.findAllBooks()}" var="b"
+                                                 disabledSelection="true" paginator="true" rows="5"
+                                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                                 rowsPerPageTemplate="5,10,15">
+                                        <p:column headerText="Book Name" filterBy="#{b.name}">
+                                            #{b.name}
+                                        </p:column>
+                                        <p:column headerText="Publish Year">
+                                            #{b.year}
+                                        </p:column>
+                                        <p:column headerText="Publisher">
+                                            #{publisherService.get(b.publisherid).name}
+                                        </p:column>
+                                        <p:column headerText="Author">
+                                            #{bookBean.getAuthorName(b)}
+                                        </p:column>
+                                        <p:column headerText="Genre">
+                                            #{bookBean.getGenreName(b)}
+                                        </p:column>
+                                        <p:column style="text-align: center;" headerText="Functions">
+                                            <div>
+                                                <p:commandLink action="#{bookBean.deleteBook(b.id)}"
+                                                               style="margin-right: 4px; color: white; text-align:center;"
+                                                               styleClass="btn btn-danger btn-circle btn-xl ">
+                                                    <i style="vertical-align: middle;"
+                                                       class="glyphicon glyphicon-remove"><f:ajax
+                                                            render="dtb3"/></i>
+
+                                                </p:commandLink>
+                                                <p:commandLink update="dialogBookEdit"
+                                                               style="margin-right: 4px;color: white; border-radius: 40px;"
+                                                               styleClass="btn btn-primary btn-circle btn-xl "
+                                                               type="button" oncomplete="PF('dlg2').show();">
+                                                    <i style="vertical-align: middle;"
+                                                       class="glyphicon glyphicon-pencil"></i>
+                                                </p:commandLink>
+                                                <p:commandLink update="dialogBookDetail"
+                                                               style="margin-right: 4px;color: white; border-radius: 40px;"
+                                                               styleClass="btn btn-circle btn-xl btn-warning"
+                                                               type="button" oncomplete="PF('dlg').show();">
+                                                    <i style="vertical-align: middle;"
+                                                       class="glyphicon glyphicon-info-sign"></i>
+                                                </p:commandLink>
+                                                <!--====================================================================-->
+                                                <!--=======================BOOK INFO DIALOG===========================-->
+                                                <!--====================================================================-->
+                                                <p:dialog id="dialogBookDetail" header="Book Info" hideEffect="fade"
+                                                          showEffect="fade" widgetVar="dlg" modal="false" width="450"
+                                                          height="450" resizable="false">
+                                                    <!--<h:form styleClass="form-group" id="infoForm">-->
+                                                    <div>
+                                                        <h:outputText value="Book ID"/>
+                                                        <h:inputText styleClass="form-control" value="#{b.id}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <div>
+                                                        <h:outputText value="Book Name"/>
+                                                        <h:inputText styleClass="form-control" value="#{b.name}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <div>
+                                                        <h:outputText value="Publish Year"/>
+                                                        <h:inputText styleClass="form-control" value="#{b.year}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <div>
+                                                        <h:outputText value="Publisher"/>
+                                                        <h:inputText styleClass="form-control"
+                                                                     value="#{publisherService.get(b.publisherid).name}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <div>
+                                                        <h:outputText value="Author"/>
+                                                        <h:inputText styleClass="form-control"
+                                                                     value="#{bookBean.getAuthorName(b)}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <div>
+                                                        <h:outputText value="Genre"/>
+                                                        <h:inputText styleClass="form-control"
+                                                                     value="#{bookBean.getGenreName(b)}"
+                                                                     readonly="true"/><br/>
+                                                    </div>
+                                                    <!--</h:form>-->
+                                                </p:dialog>
+                                                <!--====================================================================-->
+                                                <!--======================BOOK EDIT DIALOG============================-->
+                                                <!--====================================================================-->
+                                                <p:dialog id="dialogBookEdit" draggable="false" header="Author Edit"
+                                                          hideEffect="fade"
+                                                          showEffect="fade" widgetVar="dlg2" modal="false" width="450"
+                                                          height="350" resizable="false">
+                                                    <!--<h:form styleClass="form-horizontal" id="editForm">-->
+                                                    <h:outputText value="#{bookBean.findBook(b.id)}"/>
+                                                    <div class="form-group">
+                                                        <p:inputText id="bookName" styleClass="form-control"
+                                                                     placeholder="Book Name"
+                                                                     value="#{bookBean.books.name}"/><br/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <p:inputText id="bookYear" styleClass="form-control"
+                                                                     placeholder="Publish Year"
+                                                                     value="#{bookBean.books.year}"/><br/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:selectOneMenu styleClass="form-control"
+                                                                         value="#{bookBean.books.publisherid}">
+
+                                                            <f:selectItems value="#{publisherService.findAll()}"
+                                                                           var="pub"
+                                                                           itemLabel="#{pub.name}"
+                                                                           noSelectionValue="false"
+                                                                           itemValue="#{pub.id}"/>
+
+                                                        </h:selectOneMenu>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:selectOneMenu styleClass="form-control"
+                                                                         value="#{bookBean.author.id}">
+                                                            <f:selectItems value="#{authorBean.findAllAuthors()}"
+                                                                           var="auth"
+                                                                           itemLabel="#{auth.name}"
+                                                                           itemValue="#{auth.id}"
+                                                                           noSelectionValue="false"/>
+                                                        </h:selectOneMenu>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:selectOneMenu styleClass="form-control"
+                                                                         value="#{bookBean.genre.id}">
+                                                            <f:selectItems value="#{genreBean.findAllGenres()}"
+                                                                           var="genre"
+                                                                           itemLabel="#{genre.name}"
+                                                                           noSelectionValue="false"
+                                                                           itemValue="#{genre.id}"/>
+                                                        </h:selectOneMenu>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:commandButton
+                                                                styleClass="btn btn-success" type="submit"
+                                                                action="#{bookBean.updateBook(bookBean.books,bookBean.author.id,bookBean.genre.id)}"
+                                                                value="Save">
+                                                        </h:commandButton>
+                                                    </div>
+                                                    <!--</h:form>-->
+                                                </p:dialog>
+
+                                            </div>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:form>
+                    </div>
+                </div>
             </div>
         </ui:define>
     </ui:composition>

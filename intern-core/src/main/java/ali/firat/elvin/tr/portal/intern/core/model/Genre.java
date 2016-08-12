@@ -2,17 +2,22 @@ package ali.firat.elvin.tr.portal.intern.core.model;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
+import javax.persistence.criteria.Fetch;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by yektan on 26.07.2016.
  */
 @Entity
-@ManagedBean(name = "genre")
-public class Genre {
+@Table(name = "Genre",catalog = "intern")
+public class Genre implements Serializable{
     private int id;
     private String name;
-    private Collection<BookGenre> bookGenresById;
+    private Set<Books> books = new HashSet<Books>();
+
 
     @Id
     @Column(name = "ID", nullable = false)
@@ -55,12 +60,11 @@ public class Genre {
         return result;
     }
 
-    @OneToMany(mappedBy = "genreByGenreid")
-    public Collection<BookGenre> getBookGenresById() {
-        return bookGenresById;
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "genres")
+    public Set<Books> getBooks() {
+        return books;
     }
-
-    public void setBookGenresById(Collection<BookGenre> bookGenresById) {
-        this.bookGenresById = bookGenresById;
+    public void setBooks(Set<Books> books) {
+        this.books = books;
     }
 }

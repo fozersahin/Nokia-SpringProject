@@ -3,6 +3,7 @@ package ali.firat.elvin.tr.portal.intern.web.jsf.bean;
 import ali.firat.elvin.tr.portal.intern.core.exception.DaoException;
 import ali.firat.elvin.tr.portal.intern.core.framework.service.AuthorServiceImpl;
 import ali.firat.elvin.tr.portal.intern.core.model.Authors;
+import ali.firat.elvin.tr.portal.intern.web.jsf.converter.AuthorConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,14 @@ import java.util.List;
  */
 
 @Component("authorBean")
+@Scope("session")
 public class AuthorBean implements Serializable {
 
     private Authors authors = new Authors();
     private AuthorServiceImpl authorService = new AuthorServiceImpl();
     private NavigatorBean navi = new NavigatorBean();
-    private Authors selectedAuthor = new Authors();
     private List<Authors> allAuths;
+    private AuthorConverter conv = new AuthorConverter();
 
     //////////////////////////////////////////////////////////////////
     // GETTER SETTER ////////////////////////////////////////////////
@@ -55,14 +57,6 @@ public class AuthorBean implements Serializable {
         return authorService;
     }
 
-    public Authors getSelectedAuthor() {
-        return selectedAuthor;
-    }
-
-    public void setSelectedAuthor(Authors selectedAuthor) {
-        this.selectedAuthor = selectedAuthor;
-    }
-
     public void setAllAuths(List<Authors> allAuths) {
         this.allAuths = allAuths;
     }
@@ -79,16 +73,20 @@ public class AuthorBean implements Serializable {
     public void createAuthor(Authors author) {
         try {
             authorService.save(author);
-            navi.forwardToPage("/public/auth/authorlist.jsf", "false", "true");
-
+            this.authors = null;
         } catch (DaoException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
+    public void deleteAuthor(int id) {
+        try {
+            authorService.delete(id);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Authors getAuthorWithURL(int id, String URL) {
         try {
@@ -102,12 +100,13 @@ public class AuthorBean implements Serializable {
         return authors;
     }
 
-    public void findAuthor(int id) {
+    public Authors findAuthor(int id) {
         try {
             authors = authorService.get(id);
         } catch (DaoException e) {
             e.printStackTrace();
         }
+        return authors;
     }
 
     public List<Authors> findAllAuthors() {
@@ -123,6 +122,7 @@ public class AuthorBean implements Serializable {
     public void updateAuthor(Authors authors) {
         try {
             authorService.update(authors);
+            this.authors = null;
         } catch (DaoException e) {
             e.printStackTrace();
         }

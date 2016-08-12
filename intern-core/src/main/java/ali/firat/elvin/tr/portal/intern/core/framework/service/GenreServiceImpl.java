@@ -19,5 +19,6 @@ public class GenreServiceImpl extends HibernateServiceImpl<Genre,Integer> {
     public void init() {
         setHibernateDao((HibernateDaoImpl<Genre,Integer>)((HibernateDaoImpl<?,?>)genreDao));
     }
+
 }
 

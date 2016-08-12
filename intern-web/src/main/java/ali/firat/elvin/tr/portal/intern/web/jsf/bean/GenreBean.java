@@ -6,8 +6,10 @@ import ali.firat.elvin.tr.portal.intern.core.model.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by yektan on 27.07.2016.
@@ -20,6 +22,15 @@ public class GenreBean implements Serializable {
     private Genre genre = new Genre();
     private GenreServiceImpl genreService = new GenreServiceImpl();
     private NavigatorBean navi = new NavigatorBean();
+    private List<Genre> allGenres;
+
+    public List<Genre> getAllGenres() {
+        return allGenres;
+    }
+
+    public void setAllGenres(List<Genre> allGenres) {
+        this.allGenres = allGenres;
+    }
 
     public Genre getGenre() {
         return genre;
@@ -46,39 +57,33 @@ public class GenreBean implements Serializable {
         this.navi = navi;
     }
 
-    public void createGenre(Genre genre) {
-        try {
-            genreService.save(genre);
-            navi.forwardToPage("/public/auth/index.jsf", "false", "true");
-
-        } catch (DaoException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public void createGenre(Genre genre) throws DaoException {
+        genreService.save(genre);
+        this.genre=null;
     }
 
-    public Genre getGenreWithURL(int id,String URL) {
-        try {
-            navi.forwardToPage("/public/auth/"+URL+".jsf", "false", "true");
-            genre = genreService.get(id);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void deleteGenre(int id) throws DaoException {
+        genreService.delete(id);
+        this.genre=null;
+    }
+
+    public Genre findGenre(int id) throws DaoException {
+        genre = genreService.get(id);
         return genre;
     }
 
-    public void updateGenre(Genre genre){
+    public List<Genre> findAllGenres() {
         try {
-            genreService.update(genre);
-            navi.forwardToPage("/public/auth/genrelist.jsf","false","true");
+            allGenres = genreService.findAll();
         } catch (DaoException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        genre = null;
+        return allGenres;
+    }
+
+    public void updateGenre(Genre genre) throws DaoException {
+        genreService.update(genre);
+        this.genre=null;
     }
 }
