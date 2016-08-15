@@ -71,17 +71,12 @@ public class GenreBean implements Serializable {
         return genre;
     }
 
-    public List<Genre> findAllGenres() {
-        try {
+    public List<Genre> findAllGenres() throws DaoException {
             allGenres = genreService.findAll();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
         return allGenres;
     }
 
     public void updateGenre(Genre genre) throws DaoException {
         genreService.update(genre);
-        this.genre=null;
     }
 }

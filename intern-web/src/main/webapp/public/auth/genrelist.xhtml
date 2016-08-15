@@ -126,7 +126,7 @@
                                                           showEffect="fade" widgetVar="dlg2" modal="false" width="450"
                                                           height="303" resizable="false">
                                                     <!--<h:form styleClass="form-horizontal" id="editForm">-->
-                                                    <h:outputText value="#{genreBean.findGenre(gen.id)}"/>
+                                                    <h:outputText rendered="false" value="#{genreBean.findGenre(gen.id)}"/>
                                                     <div class="form-group">
                                                         <h:outputText value="Author ID"/>
                                                         <p:inputText styleClass="form-control"

@@ -70,51 +70,27 @@ public class AuthorBean implements Serializable {
     ////////////////////FUNCTIONS ///////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
-    public void createAuthor(Authors author) {
-        try {
-            authorService.save(author);
-            this.authors = null;
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-
+    public void createAuthor(Authors author) throws DaoException {
+        authorService.save(author);
     }
 
-    public void deleteAuthor(int id) {
-        try {
-            authorService.delete(id);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+    public void deleteAuthor(int id) throws DaoException {
+        authorService.delete(id);
     }
 
 
-    public Authors findAuthor(int id) {
-        try {
-            authors = authorService.get(id);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+    public Authors findAuthor(int id) throws DaoException {
+        authors = authorService.get(id);
         return authors;
     }
 
-    public List<Authors> findAllAuthors() {
-        try {
-            allAuths = authorService.findAll();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+    public List<Authors> findAllAuthors() throws DaoException {
+        allAuths = authorService.findAll();
         return allAuths;
     }
 
 
-    public void updateAuthor(Authors authors) {
-        try {
-            authorService.update(authors);
-            this.authors = null;
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+    public void updateAuthor(Authors authors) throws DaoException {
+        authorService.update(authors);
     }
-
 }

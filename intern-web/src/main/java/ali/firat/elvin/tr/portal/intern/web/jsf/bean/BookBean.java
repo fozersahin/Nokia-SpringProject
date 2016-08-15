@@ -109,61 +109,24 @@ public class BookBean implements Serializable {
         return booksService;
     }
 
-    public void createBook(Books book) {
-        try {
-            booksService.save(book);
-
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-//
-//    public Books getBookWithURL(int id,String URL) {
-//        try {
-//            navi.forwardToPage("/public/auth/"+URL+".jsf", "false", "true");
-//            books = booksService.get(id);
-//        } catch (DaoException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return books;
-//    }
-
-    public Books findBook(int id) {
-        try {
-            books = booksService.get(id);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+    public Books findBook(int id) throws DaoException {
+        books = booksService.get(id);
         return books;
     }
-//
-//    public void updateBook(Books book) {
-//        try {
-//            booksService.update(book);
-//        } catch (DaoException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
-    public List<Books> findAllBooks() {
-        try {
-            booksList = booksService.findAll();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+    public List<Books> findAllBooks() throws DaoException {
+        booksList = booksService.findAll();
         return booksList;
     }
 
     public String getAuthorName(Books book) {
-        String name="";
+        String name = "";
         String fullname = "";
         for (Authors au : book.getAuthors()) {
-            int size=book.getAuthors().size();
+            int size = book.getAuthors().size();
             if (size > 1) {
                 name = au.getName() + " ";
-                fullname = name + au.getSurname()+", ";
+                fullname = name + au.getSurname() + ", ";
             } else {
                 name = au.getName() + " ";
                 fullname = name + au.getSurname();
@@ -192,7 +155,7 @@ public class BookBean implements Serializable {
         booksService.save(book);
     }
 
-    public void updateBook(Books book, Integer id, Integer id2) throws DaoException{
+    public void updateBook(Books book, Integer id, Integer id2) throws DaoException {
         author = authorService.get(id);
         genre = genreService.get(id2);
         genreSet.clear();
@@ -204,12 +167,8 @@ public class BookBean implements Serializable {
         booksService.update(book);
     }
 
-    public void deleteBook(int id){
-        try {
-            booksService.delete(id);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+    public void deleteBook(int id) throws DaoException {
+        booksService.delete(id);
     }
 
 }

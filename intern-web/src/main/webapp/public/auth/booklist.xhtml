@@ -191,7 +191,7 @@
                                                           showEffect="fade" widgetVar="dlg2" modal="false" width="450"
                                                           height="350" resizable="false">
                                                     <!--<h:form styleClass="form-horizontal" id="editForm">-->
-                                                    <h:outputText value="#{bookBean.findBook(b.id)}"/>
+                                                    <h:outputText rendered="false" value="#{bookBean.findBook(b.id)}"/>
                                                     <div class="form-group">
                                                         <p:inputText id="bookName" styleClass="form-control"
                                                                      placeholder="Book Name"
@@ -220,8 +220,7 @@
                                                             <f:selectItems value="#{authorBean.findAllAuthors()}"
                                                                            var="auth"
                                                                            itemLabel="#{auth.name}"
-                                                                           itemValue="#{auth.id}"
-                                                                           noSelectionValue="false"/>
+                                                                           itemValue="#{auth.id}"/>
                                                         </h:selectOneMenu>
                                                     </div>
                                                     <div class="form-group">

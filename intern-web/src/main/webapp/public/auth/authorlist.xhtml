@@ -46,6 +46,7 @@
                                       height="200" resizable="false">
                                 <!--<h:form styleClass="form-horizontal" id="editForm">-->
                                 <div class="form-group">
+
                                     <p:inputText id="aName1" styleClass="form-control" placeholder="Author Name"
                                                  value="#{authorBean.authors.name}"/><br/>
                                 </div>
@@ -68,7 +69,8 @@
                     <div>
                         <h:form id="form">
                             <p:growl id="msgs" showDetail="true"/>
-                            <p:panel id="basic" header="All Authors" style="margin-top:150px;margin-bottom:150px; opacity: 0.9;">
+                            <p:panel id="basic" header="All Authors"
+                                     style="margin-top:150px;margin-bottom:150px; opacity: 0.9;">
                                 <h:panelGrid columns="2" cellpadding="10">
                                     <p:dataTable id="dtb1" value="#{authorBean.findAllAuthors()}" var="au"
                                                  disabledSelection="true" paginator="true" rows="5"
@@ -133,8 +135,8 @@
                                                           hideEffect="fade"
                                                           showEffect="fade" widgetVar="dlg2" modal="false" width="450"
                                                           height="303" resizable="false">
-                                                    <!--<h:form styleClass="form-horizontal" id="editForm">-->
-                                                    <h:outputText value="#{authorBean.findAuthor(au.id)}"/>
+                                                    <h:outputText rendered="true"
+                                                                  value="#{authorBean.findAuthor(au.id)}"/>
                                                     <div class="form-group">
                                                         <h:outputText value="Author ID"/>
                                                         <p:inputText styleClass="form-control"
@@ -158,7 +160,7 @@
                                                                 value="Save">
                                                         </h:commandButton>
                                                     </div>
-                                                    <!--</h:form>-->
+
                                                 </p:dialog>
 
                                             </div>
