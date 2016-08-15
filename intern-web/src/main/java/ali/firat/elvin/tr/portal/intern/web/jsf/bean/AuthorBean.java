@@ -88,17 +88,6 @@ public class AuthorBean implements Serializable {
         }
     }
 
-    public Authors getAuthorWithURL(int id, String URL) {
-        try {
-            authors = authorService.get(id);
-            navi.forwardToPage("/public/auth/" + URL + ".jsf", "false", "true");
-        } catch (DaoException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return authors;
-    }
 
     public Authors findAuthor(int id) {
         try {

@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @Component("genreBean")
-@Scope
+@Scope("session")
 public class GenreBean implements Serializable {
 
     private Genre genre = new Genre();
@@ -64,7 +64,6 @@ public class GenreBean implements Serializable {
 
     public void deleteGenre(int id) throws DaoException {
         genreService.delete(id);
-        this.genre=null;
     }
 
     public Genre findGenre(int id) throws DaoException {
@@ -78,7 +77,6 @@ public class GenreBean implements Serializable {
         } catch (DaoException e) {
             e.printStackTrace();
         }
-        genre = null;
         return allGenres;
     }
 
