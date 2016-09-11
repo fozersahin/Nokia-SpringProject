@@ -20,4 +20,3 @@ Nokia Internship Project
 
 8-Multiple CRUD
 
-9-ÇOCU
